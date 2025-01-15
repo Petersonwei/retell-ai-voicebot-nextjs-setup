@@ -2,6 +2,11 @@
 
 A Next.js application that implements voice chat functionality using the Retell AI SDK. This project enables real-time voice interactions with AI through an intuitive interface.
 
+![image](https://github.com/user-attachments/assets/7d4a352b-59aa-414e-b85d-6f570ae8167c) 
+![image](https://github.com/user-attachments/assets/ad67baa0-4f1a-45e1-ab80-4a2338715dae)
+
+
+
 ## Features
 
 - Real-time voice chat with AI-powered responses
