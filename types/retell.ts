@@ -18,8 +18,8 @@ export interface WebCallResponse {
   export interface RetellClient {
     createWebCall: (params: { agent_id: string }) => Promise<WebCallResponse>;
     call: {
-      endCall: (callId: string): Promise<void>;
-      retrieve: (callId: string): Promise<any>;
+      endCall: (callId: string) => Promise<void>;
+      retrieve: (callId: string) => Promise<any>;
     };
     agent_id: string;
   }

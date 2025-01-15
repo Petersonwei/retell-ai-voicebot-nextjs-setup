@@ -1,55 +1,72 @@
-// Define the event types for better type safety
-export interface RetellEvents {
-  'call_started': () => void;
-  'call_ended': () => void;
-  'error': (error: { message: string }) => void;
-  'agent_start_talking': () => void;
-  'agent_stop_talking': () => void;
-  'audio': (audio: Float32Array) => void;
-  'transcription': (message: { text: string }) => void;
-  'update': (update: { 
-    transcript?: TranscriptItem[];
-    llmResponse?: string;
-    response?: string | { content?: string; text?: string };
-  }) => void;
-  'metadata': (metadata: any) => void;
-  'response': (message: { content: string }) => void;
-}
+import { EventEmitter } from 'events';
 
 interface TranscriptItem {
   role: string;
   content: string;
 }
 
-// Define RetellWebClient as a type instead of module augmentation
-export type RetellWebClient = {
+export class RetellWebClient extends EventEmitter {
   agent_id?: string;
   access_token?: string;
   voice_id?: string;
   language?: string;
   sampleRate?: number;
-  
-  disconnect(): Promise<void>;
-  initializeDevices(): Promise<void>;
-  setVoiceConfig(config: { voice_id: string; language: string }): Promise<void>;
+  private debug: boolean = true;
+
+  constructor() {
+    super();
+    this.log('RetellWebClient initialized');
+  }
+
+  private log(...args: any[]) {
+    if (this.debug) {
+      console.log('[RetellWebClient]', ...args);
+    }
+  }
+
+  disconnect(): Promise<void> {
+    this.log('Disconnecting...');
+    return Promise.resolve();
+  }
+
+  initializeDevices(): Promise<void> {
+    this.log('Initializing devices...');
+    return Promise.resolve();
+  }
+
+  setVoiceConfig(config: { voice_id: string; language: string }): Promise<void> {
+    this.log('Setting voice config:', config);
+    return Promise.resolve();
+  }
+
   startCall(config: { 
     accessToken: string;
     sampleRate?: number;
     captureDeviceId?: string;
     playbackDeviceId?: string;
     emitRawAudioSamples?: boolean;
-  }): Promise<void>;
-  stopCall(): Promise<void>;
-  removeAllListeners(): RetellWebClient;
-  addListener(event: string, listener: (...args: any[]) => void): RetellWebClient;
-  on(event: string, listener: (...args: any[]) => void): RetellWebClient;
-  once(event: string, listener: (...args: any[]) => void): RetellWebClient;
-  emit(event: string, ...args: any[]): boolean;
+  }): Promise<void> {
+    this.log('Starting call with config:', config);
+    return Promise.resolve();
+  }
+
+  stopCall(): void {
+    this.log('Stopping call...');
+    try {
+      this.log('Emitting call_ended event');
+      this.emit('call_ended');
+      this.log('Call ended successfully');
+    } catch (error) {
+      this.log('Error in stopCall:', error);
+      this.emit('error', { message: 'Error stopping call' });
+    }
+  }
+
+  removeAllListeners(): this {
+    this.log('Removing all listeners');
+    super.removeAllListeners();
+    return this;
+  }
 }
 
-// Declare the module without redefining the type
-declare module "retell-client-js-sdk" {
-  export const RetellWebClient: {
-    new(): RetellWebClient;
-  };
-}
+export type { TranscriptItem };
